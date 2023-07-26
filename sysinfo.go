@@ -5,20 +5,23 @@
 // Package sysinfo is a Go library providing Linux OS / kernel / hardware system information.
 package sysinfo
 
+import "github.com/thediveo/go-mntinfo"
+
 // SysInfo struct encapsulates all other information structs.
 type SysInfo struct {
-	Meta    Meta            `json:"sysinfo"`
-	Node    Node            `json:"node"`
-	OS      OS              `json:"os"`
-	Kernel  Kernel          `json:"kernel"`
-	Product Product         `json:"product"`
-	Board   Board           `json:"board"`
-	Chassis Chassis         `json:"chassis"`
-	BIOS    BIOS            `json:"bios"`
-	CPU     CPU             `json:"cpu"`
-	Memory  Memory          `json:"memory"`
-	Storage []StorageDevice `json:"storage,omitempty"`
-	Network []NetworkDevice `json:"network,omitempty"`
+	Meta    Meta                `json:"sysinfo"`
+	Node    Node                `json:"node"`
+	OS      OS                  `json:"os"`
+	Kernel  Kernel              `json:"kernel"`
+	Product Product             `json:"product"`
+	Board   Board               `json:"board"`
+	Chassis Chassis             `json:"chassis"`
+	BIOS    BIOS                `json:"bios"`
+	CPU     CPU                 `json:"cpu"`
+	Memory  Memory              `json:"memory"`
+	Mount   []mntinfo.Mountinfo `json:"mount,omitempty"`
+	Storage []StorageDevice     `json:"storage,omitempty"`
+	Network []NetworkDevice     `json:"network,omitempty"`
 }
 
 // GetSysInfo gathers all available system information.
@@ -40,6 +43,7 @@ func (si *SysInfo) GetSysInfo() {
 
 	// Hardware info
 	si.getCPUInfo() // depends on Node info
+	si.getMountInfo()
 	si.getStorageInfo()
 	si.getNetworkInfo()
 
